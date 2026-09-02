@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FRED Nowcast — Real GDP, % change (annualized, quarterly)</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin:0; font-family: system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:#0d0d0d; color:#ffffff;
+  }
+  :root[data-theme="light"] body { background:#f9f9f7; color:#0b0b0b; }
+
+  .wrap { max-width: 920px; margin: 0 auto; padding: 32px 20px 60px; }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  .subtitle { color:#c3c2b7; font-size: 14px; margin-bottom: 24px; }
+  :root[data-theme="light"] .subtitle { color:#52514e; }
+
+  .card {
+    background:#1a1a19; border:1px solid rgba(255,255,255,0.10); border-radius:10px;
+    padding:20px 24px; margin-bottom:20px;
+  }
+  :root[data-theme="light"] .card { background:#fcfcfb; border-color: rgba(11,11,11,0.10); }
+
+  .card h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;
+    color:#c3c2b7; margin: 0 0 14px; }
+  :root[data-theme="light"] .card h2 { color:#52514e; }
+
+  .hero { font-size: 40px; font-weight: 700; margin: 0 0 4px; }
+  .hero-label { color:#898781; font-size: 13px; margin-bottom: 18px; }
+
+  .viz-root {
+    --surface-1:#1a1a19; --text-primary:#ffffff; --text-secondary:#c3c2b7;
+    --text-muted:#898781; --grid:#2c2c2a; --baseline:#383835;
+    --series-1:#3987e5; --series-2:#d95926; --series-3:#199e70;
+  }
+  :root[data-theme="light"] .viz-root {
+    --surface-1:#fcfcfb; --text-primary:#0b0b0b; --text-secondary:#52514e;
+    --text-muted:#898781; --grid:#e1e0d9; --baseline:#c3c2b7;
+    --series-1:#2a78d6; --series-2:#eb6834; --series-3:#1baf7a;
+  }
+
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .zero-line { stroke: var(--baseline); stroke-width: 1; stroke-dasharray: 2 2; }
+  .axis { stroke: var(--baseline); stroke-width: 1; }
+  .tick { fill: var(--text-muted); font-size: 11px; }
+  .line-actual { stroke: var(--series-1); stroke-width: 2; }
+  .line-model { stroke: var(--series-2); stroke-width: 2; }
+  .line-naive { stroke: var(--series-3); stroke-width: 1.5; stroke-dasharray: 4 3; opacity: 0.75; }
+
+  .legend { display:flex; gap:18px; padding: 6px 0 0 56px; font-size: 13px;
+    color: var(--text-secondary); flex-wrap: wrap; }
+  .legend-item { display:flex; align-items:center; gap:6px; }
+  .swatch { width:10px; height:10px; border-radius:2px; display:inline-block; }
+  .swatch-actual { background: var(--series-1); }
+  .swatch-model { background: var(--series-2); }
+  .swatch-naive { background: var(--series-3); }
+
+  .tooltip {
+    position:absolute; background: var(--surface-1); border:1px solid rgba(255,255,255,0.10);
+    border-radius:6px; padding:8px 10px; font-size:12px; pointer-events:none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4); color: var(--text-primary);
+  }
+  :root[data-theme="light"] .tooltip {
+    border-color: rgba(11,11,11,0.10); box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  .tooltip .t-q { color: var(--text-secondary); margin-bottom:4px; }
+  .tooltip .t-row { display:flex; justify-content:space-between; gap:16px; }
+
+  table.coef-table { width:100%; border-collapse: collapse; font-size: 13px; }
+  table.coef-table th, table.coef-table td {
+    padding: 7px 10px; text-align:left; border-bottom: 1px solid #2c2c2a;
+    font-variant-numeric: tabular-nums;
+  }
+  :root[data-theme="light"] table.coef-table th,
+  :root[data-theme="light"] table.coef-table td { border-bottom-color: #e1e0d9; }
+  table.coef-table td.num { text-align: right; }
+  table.coef-table th { color:#898781; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; }
+
+  .verdict { font-size: 14px; line-height: 1.6; }
+  .footer { color:#898781; font-size: 11px; margin-top: 32px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>FRED Nowcast — Real GDP, % change (annualized, quarterly)</h1>
+  <div class="subtitle">A bridge-equation OLS nowcast of Real GDP, % change (annualized, quarterly), built from 5 higher-frequency leading indicators.</div>
+
+  <div class="card">
+    <div class="hero">+3.65%</div>
+    <div class="hero-label">2026Q2 real GDP growth nowcast (annualized) &plusmn;1.87pp</div>
+    <h2>Backtest: actual vs. model vs. naive baseline</h2>
+    
+<div class="viz-root">
+  <svg viewBox="0 0 860 360" width="100%" height="360" id="chart-svg">
+    <line class="gridline" x1="56" y1="320.0" x2="770" y2="320.0"/><text class="tick" x="48" y="320.0" text-anchor="end" dominant-baseline="middle">-34.3</text><line class="gridline" x1="56" y1="246.0" x2="770" y2="246.0"/><text class="tick" x="48" y="246.0" text-anchor="end" dominant-baseline="middle">-15.4</text><line class="gridline" x1="56" y1="172.0" x2="770" y2="172.0"/><text class="tick" x="48" y="172.0" text-anchor="end" dominant-baseline="middle">3.4</text><line class="gridline" x1="56" y1="98.0" x2="770" y2="98.0"/><text class="tick" x="48" y="98.0" text-anchor="end" dominant-baseline="middle">22.3</text><line class="gridline" x1="56" y1="24.0" x2="770" y2="24.0"/><text class="tick" x="48" y="24.0" text-anchor="end" dominant-baseline="middle">41.2</text><line class="zero-line" x1="56" y1="185.5" x2="770" y2="185.5"/>
+    <line class="axis" x1="56" y1="320"
+          x2="770" y2="320"/>
+    <path class="line-naive" d="M56.00,172.20 L63.44,175.73 L70.88,179.25 L78.31,183.57 L85.75,177.29 L93.19,171.41 L100.62,158.86 L108.06,167.10 L115.50,176.51 L122.94,173.37 L130.38,170.63 L137.81,169.45 L145.25,167.88 L152.69,177.69 L160.12,172.98 L167.56,176.90 L175.00,163.96 L182.44,181.61 L189.88,183.18 L197.31,171.80 L204.75,180.82 L212.19,175.73 L219.62,176.51 L227.06,175.73 L234.50,192.20 L241.94,176.12 L249.38,193.76 L256.81,218.86 L264.25,203.18 L271.69,188.27 L279.12,180.04 L286.56,168.27 L294.00,178.08 L301.44,170.24 L308.88,173.37 L316.31,177.29 L323.75,189.06 L331.19,174.94 L338.62,185.92 L346.06,167.49 L353.50,172.20 L360.94,178.47 L368.38,183.18 L375.81,183.57 L383.25,169.84 L390.69,181.22 L398.12,171.80 L405.56,171.80 L413.00,191.02 L420.44,164.75 L427.88,165.92 L435.31,177.69 L442.75,171.41 L450.19,175.73 L457.62,179.25 L465.06,182.78 L472.50,176.51 L479.94,180.43 L487.38,174.16 L494.81,176.90 L502.25,177.69 L509.69,176.51 L517.12,172.98 L524.56,167.49 L532.00,172.59 L539.44,177.29 L546.88,175.73 L554.31,183.18 L561.75,175.73 L569.19,172.20 L576.62,166.71 L584.06,174.55 L591.50,205.92 L598.94,295.33 L606.38,48.67 L613.81,167.49 L621.25,163.18 L628.69,158.08 L636.12,172.59 L643.56,158.08 L651.00,189.45 L658.44,183.18 L665.88,174.16 L673.31,174.55 L680.75,174.16 L688.19,175.73 L695.62,167.10 L703.06,172.20 L710.50,182.39 L717.94,171.41 L725.38,172.59 L732.81,178.08 L740.25,187.88 L747.69,170.63 L755.12,168.27 L762.56,183.57 L770.00,177.29" fill="none"/>
+    <path class="line-model" d="M56.00,168.07 L63.44,173.90 L70.88,177.70 L78.31,175.14 L85.75,182.41 L93.19,170.14 L100.62,167.98 L108.06,174.86 L115.50,173.17 L122.94,173.08 L130.38,168.77 L137.81,167.98 L145.25,173.46 L152.69,178.45 L160.12,173.17 L167.56,167.79 L175.00,182.00 L182.44,179.56 L189.88,180.93 L197.31,174.73 L204.75,171.96 L212.19,182.11 L219.62,181.25 L227.06,183.92 L234.50,187.59 L241.94,201.16 L249.38,214.29 L256.81,213.81 L264.25,184.43 L271.69,164.36 L279.12,173.96 L286.56,167.76 L294.00,169.91 L301.44,176.10 L308.88,172.31 L316.31,169.59 L323.75,174.13 L331.19,170.88 L338.62,169.55 L346.06,169.01 L353.50,175.76 L360.94,175.21 L368.38,171.69 L375.81,171.18 L383.25,176.85 L390.69,174.34 L398.12,174.23 L405.56,174.61 L413.00,168.91 L420.44,173.38 L427.88,174.15 L435.31,182.63 L442.75,173.69 L450.19,175.26 L457.62,180.79 L465.06,178.66 L472.50,176.30 L479.94,174.73 L487.38,175.28 L494.81,174.13 L502.25,174.30 L509.69,178.98 L517.12,169.66 L524.56,173.33 L532.00,172.68 L539.44,173.97 L546.88,179.16 L554.31,180.29 L561.75,175.50 L569.19,174.86 L576.62,178.19 L584.06,239.66 L591.50,289.10 L598.94,100.92 L606.38,164.74 L613.81,158.07 L621.25,148.32 L628.69,173.13 L636.12,162.75 L643.56,165.64 L651.00,167.67 L658.44,180.46 L665.88,181.90 L673.31,174.01 L680.75,176.63 L688.19,176.09 L695.62,177.20 L703.06,182.46 L710.50,176.67 L717.94,178.64 L725.38,174.88 L732.81,175.40 L740.25,178.53 L747.69,174.84 L755.12,181.20 L762.56,173.70 L770.00,170.91" fill="none"/>
+    <path class="line-actual" d="M56.00,175.73 L63.44,179.25 L70.88,183.57 L78.31,177.29 L85.75,171.41 L93.19,158.86 L100.62,167.10 L108.06,176.51 L115.50,173.37 L122.94,170.63 L130.38,169.45 L137.81,167.88 L145.25,177.69 L152.69,172.98 L160.12,176.90 L167.56,163.96 L175.00,181.61 L182.44,183.18 L189.88,171.80 L197.31,180.82 L204.75,175.73 L212.19,176.51 L219.62,175.73 L227.06,192.20 L234.50,176.12 L241.94,193.76 L249.38,218.86 L256.81,203.18 L264.25,188.27 L271.69,180.04 L279.12,168.27 L286.56,178.08 L294.00,170.24 L301.44,173.37 L308.88,177.29 L316.31,189.06 L323.75,174.94 L331.19,185.92 L338.62,167.49 L346.06,172.20 L353.50,178.47 L360.94,183.18 L368.38,183.57 L375.81,169.84 L383.25,181.22 L390.69,171.80 L398.12,171.80 L405.56,191.02 L413.00,164.75 L420.44,165.92 L427.88,177.69 L435.31,171.41 L442.75,175.73 L450.19,179.25 L457.62,182.78 L465.06,176.51 L472.50,180.43 L479.94,174.16 L487.38,176.90 L494.81,177.69 L502.25,176.51 L509.69,172.98 L517.12,167.49 L524.56,172.59 L532.00,177.29 L539.44,175.73 L546.88,183.18 L554.31,175.73 L561.75,172.20 L569.19,166.71 L576.62,174.55 L584.06,205.92 L591.50,295.33 L598.94,48.67 L606.38,167.49 L613.81,163.18 L621.25,158.08 L628.69,172.59 L636.12,158.08 L643.56,189.45 L651.00,183.18 L658.44,174.16 L665.88,174.55 L673.31,174.16 L680.75,175.73 L688.19,167.10 L695.62,172.20 L703.06,182.39 L710.50,171.41 L717.94,172.59 L725.38,178.08 L732.81,187.88 L740.25,170.63 L747.69,168.27 L755.12,183.57 L762.56,177.29 L770.00,179.65" fill="none"/>
+    <rect class="hover-capture" x="56" y="24"
+          width="714" height="296" fill="transparent"
+          onmousemove="onChartHover(event)" onmouseleave="onChartLeave()"/>
+    <line class="crosshair" id="crosshair" x1="0" y1="24" x2="0"
+          y2="320" style="display:none"/>
+  </svg>
+  <div class="legend">
+    <span class="legend-item"><span class="swatch swatch-actual"></span>Actual GDP growth</span>
+    <span class="legend-item"><span class="swatch swatch-model"></span>Model nowcast</span>
+    <span class="legend-item"><span class="swatch swatch-naive"></span>Naive (last quarter)</span>
+  </div>
+  <div class="tooltip" id="chart-tooltip" style="display:none"></div>
+</div>
+<script>
+  const HOVER_DATA = [{"x": 56.0, "quarter": "2002Q2", "actual": 2.5, "model": 4.45, "naive": 3.4}, {"x": 63.44, "quarter": "2002Q3", "actual": 1.6, "model": 2.97, "naive": 2.5}, {"x": 70.88, "quarter": "2002Q4", "actual": 0.5, "model": 2.0, "naive": 1.6}, {"x": 78.31, "quarter": "2003Q1", "actual": 2.1, "model": 2.65, "naive": 0.5}, {"x": 85.75, "quarter": "2003Q2", "actual": 3.6, "model": 0.8, "naive": 2.1}, {"x": 93.19, "quarter": "2003Q3", "actual": 6.8, "model": 3.92, "naive": 3.6}, {"x": 100.62, "quarter": "2003Q4", "actual": 4.7, "model": 4.48, "naive": 6.8}, {"x": 108.06, "quarter": "2004Q1", "actual": 2.3, "model": 2.72, "naive": 4.7}, {"x": 115.5, "quarter": "2004Q2", "actual": 3.1, "model": 3.15, "naive": 2.3}, {"x": 122.94, "quarter": "2004Q3", "actual": 3.8, "model": 3.17, "naive": 3.1}, {"x": 130.38, "quarter": "2004Q4", "actual": 4.1, "model": 4.27, "naive": 3.8}, {"x": 137.81, "quarter": "2005Q1", "actual": 4.5, "model": 4.48, "naive": 4.1}, {"x": 145.25, "quarter": "2005Q2", "actual": 2.0, "model": 3.08, "naive": 4.5}, {"x": 152.69, "quarter": "2005Q3", "actual": 3.2, "model": 1.8, "naive": 2.0}, {"x": 160.12, "quarter": "2005Q4", "actual": 2.2, "model": 3.15, "naive": 3.2}, {"x": 167.56, "quarter": "2006Q1", "actual": 5.5, "model": 4.52, "naive": 2.2}, {"x": 175.0, "quarter": "2006Q2", "actual": 1.0, "model": 0.9, "naive": 5.5}, {"x": 182.44, "quarter": "2006Q3", "actual": 0.6, "model": 1.52, "naive": 1.0}, {"x": 189.88, "quarter": "2006Q4", "actual": 3.5, "model": 1.17, "naive": 0.6}, {"x": 197.31, "quarter": "2007Q1", "actual": 1.2, "model": 2.75, "naive": 3.5}, {"x": 204.75, "quarter": "2007Q2", "actual": 2.5, "model": 3.46, "naive": 1.2}, {"x": 212.19, "quarter": "2007Q3", "actual": 2.3, "model": 0.87, "naive": 2.5}, {"x": 219.62, "quarter": "2007Q4", "actual": 2.5, "model": 1.09, "naive": 2.3}, {"x": 227.06, "quarter": "2008Q1", "actual": -1.7, "model": 0.41, "naive": 2.5}, {"x": 234.5, "quarter": "2008Q2", "actual": 2.4, "model": -0.53, "naive": -1.7}, {"x": 241.94, "quarter": "2008Q3", "actual": -2.1, "model": -3.98, "naive": 2.4}, {"x": 249.38, "quarter": "2008Q4", "actual": -8.5, "model": -7.33, "naive": -2.1}, {"x": 256.81, "quarter": "2009Q1", "actual": -4.5, "model": -7.21, "naive": -8.5}, {"x": 264.25, "quarter": "2009Q2", "actual": -0.7, "model": 0.28, "naive": -4.5}, {"x": 271.69, "quarter": "2009Q3", "actual": 1.4, "model": 5.4, "naive": -0.7}, {"x": 279.12, "quarter": "2009Q4", "actual": 4.4, "model": 2.95, "naive": 1.4}, {"x": 286.56, "quarter": "2010Q1", "actual": 1.9, "model": 4.53, "naive": 4.4}, {"x": 294.0, "quarter": "2010Q2", "actual": 3.9, "model": 3.98, "naive": 1.9}, {"x": 301.44, "quarter": "2010Q3", "actual": 3.1, "model": 2.4, "naive": 3.9}, {"x": 308.88, "quarter": "2010Q4", "actual": 2.1, "model": 3.37, "naive": 3.1}, {"x": 316.31, "quarter": "2011Q1", "actual": -0.9, "model": 4.06, "naive": 2.1}, {"x": 323.75, "quarter": "2011Q2", "actual": 2.7, "model": 2.91, "naive": -0.9}, {"x": 331.19, "quarter": "2011Q3", "actual": -0.1, "model": 3.74, "naive": 2.7}, {"x": 338.62, "quarter": "2011Q4", "actual": 4.6, "model": 4.07, "naive": -0.1}, {"x": 346.06, "quarter": "2012Q1", "actual": 3.4, "model": 4.21, "naive": 4.6}, {"x": 353.5, "quarter": "2012Q2", "actual": 1.8, "model": 2.49, "naive": 3.4}, {"x": 360.94, "quarter": "2012Q3", "actual": 0.6, "model": 2.63, "naive": 1.8}, {"x": 368.38, "quarter": "2012Q4", "actual": 0.5, "model": 3.53, "naive": 0.6}, {"x": 375.81, "quarter": "2013Q1", "actual": 4.0, "model": 3.66, "naive": 0.5}, {"x": 383.25, "quarter": "2013Q2", "actual": 1.1, "model": 2.21, "naive": 4.0}, {"x": 390.69, "quarter": "2013Q3", "actual": 3.5, "model": 2.85, "naive": 1.1}, {"x": 398.12, "quarter": "2013Q4", "actual": 3.5, "model": 2.88, "naive": 3.5}, {"x": 405.56, "quarter": "2014Q1", "actual": -1.4, "model": 2.78, "naive": 3.5}, {"x": 413.0, "quarter": "2014Q2", "actual": 5.3, "model": 4.24, "naive": -1.4}, {"x": 420.44, "quarter": "2014Q3", "actual": 5.0, "model": 3.1, "naive": 5.3}, {"x": 427.88, "quarter": "2014Q4", "actual": 2.0, "model": 2.9, "naive": 5.0}, {"x": 435.31, "quarter": "2015Q1", "actual": 3.6, "model": 0.74, "naive": 2.0}, {"x": 442.75, "quarter": "2015Q2", "actual": 2.5, "model": 3.02, "naive": 3.6}, {"x": 450.19, "quarter": "2015Q3", "actual": 1.6, "model": 2.62, "naive": 2.5}, {"x": 457.62, "quarter": "2015Q4", "actual": 0.7, "model": 1.21, "naive": 1.6}, {"x": 465.06, "quarter": "2016Q1", "actual": 2.3, "model": 1.75, "naive": 0.7}, {"x": 472.5, "quarter": "2016Q2", "actual": 1.3, "model": 2.35, "naive": 2.3}, {"x": 479.94, "quarter": "2016Q3", "actual": 2.9, "model": 2.75, "naive": 1.3}, {"x": 487.38, "quarter": "2016Q4", "actual": 2.2, "model": 2.61, "naive": 2.9}, {"x": 494.81, "quarter": "2017Q1", "actual": 2.0, "model": 2.91, "naive": 2.2}, {"x": 502.25, "quarter": "2017Q2", "actual": 2.3, "model": 2.86, "naive": 2.0}, {"x": 509.69, "quarter": "2017Q3", "actual": 3.2, "model": 1.67, "naive": 2.3}, {"x": 517.12, "quarter": "2017Q4", "actual": 4.6, "model": 4.05, "naive": 3.2}, {"x": 524.56, "quarter": "2018Q1", "actual": 3.3, "model": 3.11, "naive": 4.6}, {"x": 532.0, "quarter": "2018Q2", "actual": 2.1, "model": 3.28, "naive": 3.3}, {"x": 539.44, "quarter": "2018Q3", "actual": 2.5, "model": 2.95, "naive": 2.1}, {"x": 546.88, "quarter": "2018Q4", "actual": 0.6, "model": 1.63, "naive": 2.5}, {"x": 554.31, "quarter": "2019Q1", "actual": 2.5, "model": 1.34, "naive": 0.6}, {"x": 561.75, "quarter": "2019Q2", "actual": 3.4, "model": 2.56, "naive": 2.5}, {"x": 569.19, "quarter": "2019Q3", "actual": 4.8, "model": 2.72, "naive": 3.4}, {"x": 576.62, "quarter": "2019Q4", "actual": 2.8, "model": 1.87, "naive": 4.8}, {"x": 584.06, "quarter": "2020Q1", "actual": -5.2, "model": -13.8, "naive": 2.8}, {"x": 591.5, "quarter": "2020Q2", "actual": -28.0, "model": -26.41, "naive": -5.2}, {"x": 598.94, "quarter": "2020Q3", "actual": 34.9, "model": 21.58, "naive": -28.0}, {"x": 606.38, "quarter": "2020Q4", "actual": 4.6, "model": 5.3, "naive": 34.9}, {"x": 613.81, "quarter": "2021Q1", "actual": 5.7, "model": 7.0, "naive": 4.6}, {"x": 621.25, "quarter": "2021Q2", "actual": 7.0, "model": 9.49, "naive": 5.7}, {"x": 628.69, "quarter": "2021Q3", "actual": 3.3, "model": 3.16, "naive": 7.0}, {"x": 636.12, "quarter": "2021Q4", "actual": 7.0, "model": 5.81, "naive": 3.3}, {"x": 643.56, "quarter": "2022Q1", "actual": -1.0, "model": 5.07, "naive": 7.0}, {"x": 651.0, "quarter": "2022Q2", "actual": 0.6, "model": 4.55, "naive": -1.0}, {"x": 658.44, "quarter": "2022Q3", "actual": 2.9, "model": 1.29, "naive": 0.6}, {"x": 665.88, "quarter": "2022Q4", "actual": 2.8, "model": 0.93, "naive": 2.9}, {"x": 673.31, "quarter": "2023Q1", "actual": 2.9, "model": 2.94, "naive": 2.8}, {"x": 680.75, "quarter": "2023Q2", "actual": 2.5, "model": 2.27, "naive": 2.9}, {"x": 688.19, "quarter": "2023Q3", "actual": 4.7, "model": 2.41, "naive": 2.5}, {"x": 695.62, "quarter": "2023Q4", "actual": 3.4, "model": 2.12, "naive": 4.7}, {"x": 703.06, "quarter": "2024Q1", "actual": 0.8, "model": 0.78, "naive": 3.4}, {"x": 710.5, "quarter": "2024Q2", "actual": 3.6, "model": 2.26, "naive": 0.8}, {"x": 717.94, "quarter": "2024Q3", "actual": 3.3, "model": 1.76, "naive": 3.6}, {"x": 725.38, "quarter": "2024Q4", "actual": 1.9, "model": 2.72, "naive": 3.3}, {"x": 732.81, "quarter": "2025Q1", "actual": -0.6, "model": 2.58, "naive": 1.9}, {"x": 740.25, "quarter": "2025Q2", "actual": 3.8, "model": 1.78, "naive": -0.6}, {"x": 747.69, "quarter": "2025Q3", "actual": 4.4, "model": 2.73, "naive": 3.8}, {"x": 755.12, "quarter": "2025Q4", "actual": 0.5, "model": 1.1, "naive": 4.4}, {"x": 762.56, "quarter": "2026Q1", "actual": 2.1, "model": 3.02, "naive": 0.5}, {"x": 770.0, "quarter": "2026Q2", "actual": 1.5, "model": 3.73, "naive": 2.1}];
+  const X_STEP = 7.4375;
+</script>
+
+  </div>
+
+  <div class="card">
+    <h2>Model coefficients (this quarter's fit, all history)</h2>
+    <table class="coef-table">
+      <thead><tr><th>Indicator</th><th class="num">Coefficient</th></tr></thead>
+      <tbody><tr><td>Industrial Production Index</td><td class="num">+0.725</td></tr><tr><td>Retail & Food Services Sales</td><td class="num">+0.625</td></tr><tr><td>Initial Unemployment Claims</td><td class="num">-0.012</td></tr><tr><td>Total Nonfarm Payrolls</td><td class="num">+1.118</td></tr><tr><td>Housing Starts</td><td class="num">+0.071</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Read</h2>
+    <div class="verdict"><p>Out-of-sample, this model beats the naive baseline by <strong>70%</strong> (RMSE 2.40 vs. 7.90 for naive) across 97 expanding-window backtested quarters — no lookahead, each quarter predicted using only prior data.</p>
+<p><strong>Caveat on that number:</strong> the 2020 COVID quarters (a -28% crash then a +34.9% rebound) make the naive baseline look catastrophically bad almost by definition — "assume no change" is guaranteed to fail across a V-shaped shock, regardless of model quality. Excluding those four quarters, the improvement is a more honest <strong>29%</strong> (RMSE 1.81 vs. 2.54 over 93 quarters) — still a real improvement, just not the inflated headline number.</p>
+<p><strong>2026Q2 nowcast: +3.65%</strong> (&plusmn;1.87 at 1 residual std dev, from a fit with R&sup2;=0.83). The official figure for this quarter has already been released; shown for reference against the model.</p></div>
+  </div>
+
+  <div class="footer">Generated 2026-08-17 20:56 UTC &middot; fred-nowcast &middot; plain OLS bridge
+    equation on final-revised FRED data (not real-time vintage) &middot; backtested with an
+    expanding window, no lookahead &middot; a transparent estimate, not a GDPNow-class model.</div>
+</div>
+<script>
+function onChartHover(evt) {
+  const svg = document.getElementById('chart-svg');
+  const pt = svg.createSVGPoint();
+  pt.x = evt.clientX; pt.y = evt.clientY;
+  const loc = pt.matrixTransform(svg.getScreenCTM().inverse());
+  let nearest = HOVER_DATA[0], minDist = Infinity;
+  for (const d of HOVER_DATA) {
+    const dist = Math.abs(d.x - loc.x);
+    if (dist < minDist) { minDist = dist; nearest = d; }
+  }
+  const crosshair = document.getElementById('crosshair');
+  crosshair.setAttribute('x1', nearest.x); crosshair.setAttribute('x2', nearest.x);
+  crosshair.style.display = 'block';
+  const tip = document.getElementById('chart-tooltip');
+  tip.style.display = 'block';
+  tip.style.left = (evt.pageX + 14) + 'px';
+  tip.style.top = (evt.pageY - 50) + 'px';
+  tip.innerHTML = `<div class="t-q">${nearest.quarter}</div>` +
+    `<div class="t-row"><span>Actual</span><strong>${nearest.actual.toFixed(2)}</strong></div>` +
+    `<div class="t-row"><span>Model</span><strong>${nearest.model.toFixed(2)}</strong></div>` +
+    `<div class="t-row"><span>Naive</span><strong>${nearest.naive.toFixed(2)}</strong></div>`;
+}
+function onChartLeave() {
+  document.getElementById('crosshair').style.display = 'none';
+  document.getElementById('chart-tooltip').style.display = 'none';
+}
+</script>
+</body>
+</html>
