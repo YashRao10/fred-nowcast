@@ -54,7 +54,7 @@ def main() -> None:
             nowcast_quarter = q
             break
     if nowcast_quarter is None:
-        print(json.dumps({"error": "No quarter has complete feature data — check the FRED pull."}))
+        print(json.dumps({"error": "No quarter has complete feature data. Check the FRED pull."}))
         sys.exit(1)
 
     has_actual = nowcast_quarter in target.index

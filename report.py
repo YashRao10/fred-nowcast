@@ -99,7 +99,7 @@ def _verdict(summary: dict, summary_ex_shock: dict, current_fit: dict, nowcast_v
         parts.append(
             f"<p><strong>This model does not beat the naive baseline.</strong> Out-of-sample "
             f"RMSE is {summary['model_rmse']:.2f} vs. {summary['naive_rmse']:.2f} for simply "
-            f"assuming GDP growth repeats last quarter's value — the five indicators here don't "
+            f"assuming GDP growth repeats last quarter's value: the five indicators here don't "
             f"add real predictive signal over that trivial baseline across "
             f"{summary['n_quarters']} backtested quarters. Read the nowcast below as a rough "
             f"directional estimate at best, not a validated forecast.</p>"
@@ -109,17 +109,17 @@ def _verdict(summary: dict, summary_ex_shock: dict, current_fit: dict, nowcast_v
             f"<p>Out-of-sample, this model beats the naive baseline by "
             f"<strong>{summary['improvement_pct']:.0f}%</strong> (RMSE {summary['model_rmse']:.2f} "
             f"vs. {summary['naive_rmse']:.2f} for naive) across {summary['n_quarters']} "
-            f"expanding-window backtested quarters — no lookahead, each quarter predicted using "
+            f"expanding-window backtested quarters: no lookahead, each quarter predicted using "
             f"only prior data.</p>"
         )
     parts.append(
         f"<p><strong>Caveat on that number:</strong> the 2020 COVID quarters (a -28% crash then "
         f"a +34.9% rebound) make the naive baseline look catastrophically bad almost by "
-        f"definition — \"assume no change\" is guaranteed to fail across a V-shaped shock, "
+        f"definition: \"assume no change\" is guaranteed to fail across a V-shaped shock, "
         f"regardless of model quality. Excluding those four quarters, the improvement is a more "
         f"honest <strong>{summary_ex_shock['improvement_pct']:.0f}%</strong> (RMSE "
         f"{summary_ex_shock['model_rmse']:.2f} vs. {summary_ex_shock['naive_rmse']:.2f} over "
-        f"{summary_ex_shock['n_quarters']} quarters) — still a real improvement, just not the "
+        f"{summary_ex_shock['n_quarters']} quarters): still a real improvement, just not the "
         f"inflated headline number.</p>"
     )
 
@@ -127,7 +127,7 @@ def _verdict(summary: dict, summary_ex_shock: dict, current_fit: dict, nowcast_v
     parts.append(
         f"<p><strong>{nowcast_quarter} nowcast: {nowcast_value:+.2f}%</strong> "
         f"(&plusmn;{band:.2f} at 1 residual std dev, from a fit with R&sup2;={r2:.2f}). "
-        f"{'This quarter has not been officially released yet — this is a live estimate.' if not has_actual else 'The official figure for this quarter has already been released; shown for reference against the model.'}</p>"
+        f"{'This quarter has not been officially released yet. This is a live estimate.' if not has_actual else 'The official figure for this quarter has already been released; shown for reference against the model.'}</p>"
     )
     return "\n".join(parts)
 
@@ -295,7 +295,7 @@ def render(
         for fid, coef in zip(feature_cols, current_fit["coefficients"])
     )
     return PAGE_TEMPLATE.format(
-        title=f"FRED Nowcast — {target_label}",
+        title=f"FRED Nowcast: {target_label}",
         description=(
             f"A bridge-equation OLS nowcast of {target_label}, built from "
             f"{len(feature_cols)} higher-frequency leading indicators."
